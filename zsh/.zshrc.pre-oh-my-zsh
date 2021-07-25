@@ -1,0 +1,33 @@
+alias emacs="open -a /Applications/Emacs.app $1"
+alias ls="exa --color auto --all --group-directories-first --long --group --header --modified --sort=name --git --time-style=long-iso --classify"
+alias lsd="ls -d */"
+alias ..="cd .."
+alias ...="cd .. & cd .."
+alias ....="cd .. & cd .. & cd .."
+alias .....="cd .. & cd .. & cd .. & cd .."
+alias cd.="cd ~"
+alias cdc="cd ~/code"
+alias cdecm="cd ~/code/ecm"
+alias cdui="cd ~/code/ecm/app.earthclassmail.com"
+alias cdwp="cd ~/.bitnami/stackman/machines/xampp/volumes/root/htdocs/earthclassmail/wp-content/themes/wp-theme-transit-master"
+alias bashrc="vi ~/.bashrc"
+alias dw="mssql-cli -S ecm-dw-staging.database.windows.net,1433 -U andrewb -P ksB2KvYp -d datawarehouse" 
+alias cdmk="cd ~/code/ecm/marketing-site"
+alias mkstaging="ssh -p 27722 andrew@52.183.59.172"
+alias gst="git status" 
+alias gb="git branch $1"
+alias gc="git checkout $1"
+alias gcb="git checkout -b $1"
+alias vi="nvim $1"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+export TODO_MVC_HOST=localhost
+export TODO_MVC_PORT=5432
+export TODO_MVC_DATABASE=todo_dev
+export TODO_MVC_TEST_HOST=localhost
+export TODO_MVC_TEST_PORT=5432
+export TODO_MVC_TEST_DATABASE=todo_test
+DEFAULT=$PS1
+PS1="\[\033[01;34m\]\w\ $ "
+eval "$(thefuck --alias)"

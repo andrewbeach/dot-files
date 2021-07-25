@@ -14,13 +14,24 @@ font:
 
 background_opacity: 0.9
 
+window: 
+  decorations: buttonless
+  padding: 
+    x: 8
+    y: 16
+
 scrolling: 
   multiplier: 40
 
-startup_mode: Fullscren 
-
 key_bindings: 
-  - { key: Equals, mods: Alt, action: IncreaseFontSize }
-  - { key: Minus,  mods: Alt, action: DecreaseFontSize }
-  - { key: N,      mods: Alt, action: SpawnNewInstance }
-  - { key: K,      mods: Alt, action: ClearHistory }
+  - { key: Equals, mods: Command, action: IncreaseFontSize }
+  - { key: Minus,  mods: Command, action: DecreaseFontSize }
+  - { key: N,      mods: Command, command: { program: "open", args: ["-nb", "io.alacritty"] } }
+
+  - { key: K,      mods: Command, action: ClearHistory }
+  - { key: H,      mods: Command, action: Hide }
+
+shell:
+  program: /bin/zsh
+  args:
+    - --login
