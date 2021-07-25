@@ -1,5 +1,8 @@
 #!/bin/zsh
 
 cp ~/.config/alacritty/dark.yml  ~/.config/alacritty/current-theme.yml
-osascript -l JavaScript -e "Application('System Events').appearancePreferences.darkMode = true"
+if [[ $1 == "os" ]]
+then 
+  osascript -l JavaScript -e "Application('System Events').appearancePreferences.darkMode = true"
+fi
 touch ~/.config/alacritty/alacritty.yml

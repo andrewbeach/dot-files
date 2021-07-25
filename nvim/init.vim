@@ -27,7 +27,9 @@ set omnifunc=syntaxcomplete#Complete
 hi Pmenu ctermfg=0 ctermbg=5 guifg=white guibg=Magenta
 hi ColorColumn ctermbg=lightgrey guibg=lightgrey
 nnoremap <leader>md :silent exec "!dark-mode"<cr>
+nnoremap <leader>mD :silent exec "!dark-mode os"<cr>
 nnoremap <leader>ml :silent exec "!light-mode"<cr>
+nnoremap <leader>mL :silent exec "!light-mode os"<cr>
 
 " Statusline
 set statusline=%f
