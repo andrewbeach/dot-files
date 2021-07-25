@@ -218,6 +218,7 @@ nnoremap <leader>t :tab drop<space>
 nnoremap <leader><C-I> :tab drop ~/.config/nvim/init.vim <cr>
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
+nnoremap <leader>ea :vsplit $HOME/.config/alacritty/alacritty.yml<cr>
 
 " Copy Paste
 vnoremap <C-c> "*y
