@@ -1,0 +1,5 @@
+#!/bin/zsh
+
+cp ~/.config/alacritty/light.yml  ~/.config/alacritty/current-theme.yml
+osascript -l JavaScript -e "Application('System Events').appearancePreferences.darkMode = false"
+touch ~/.config/alacritty/alacritty.yml
