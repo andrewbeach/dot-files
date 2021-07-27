@@ -26,6 +26,9 @@ set omnifunc=syntaxcomplete#Complete
 " Colors
 hi Pmenu ctermfg=0 ctermbg=5 guifg=white guibg=Magenta
 hi ColorColumn ctermbg=lightgrey guibg=lightgrey
+hi TabLine cterm=NONE ctermfg=darkgrey ctermbg=NONE
+hi TabLineSel ctermbg=NONE
+hi TabLineFill cterm=NONE
 nnoremap <leader>md :silent exec "!dark-mode"<cr>
 nnoremap <leader>mD :silent exec "!dark-mode os"<cr>
 nnoremap <leader>ml :silent exec "!light-mode"<cr>
@@ -153,6 +156,7 @@ Plug 'othree/html5.vim'
 " Nerdtree
 Plug 'https://github.com/preservim/nerdtree.git'
 map <Leader>n :NERDTreeToggle %<CR>
+
 call plug#end()
 
 silent! helptags ALL
