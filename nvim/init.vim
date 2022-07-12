@@ -14,6 +14,8 @@ set number
 set wildmode=longest,list   " get bash-like tab completions
 set cmdheight=2 
 
+
+
 set textwidth=80
 
 let mapleader = ","
@@ -45,6 +47,7 @@ call plug#begin('~/.config/nvim/plugged')
 
 " Git 
 Plug 'https://github.com/tpope/vim-fugitive'
+nmap gmc /\v^[<=>\|]{7}.*$<CR>
 
 " Search 
 Plug 'https://github.com/rking/ag.vim'
