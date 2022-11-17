@@ -29,6 +29,7 @@ key_bindings:
   - { key: N,      mods: Command, action: SpawnNewInstance }
   - { key: K,      mods: Command, action: ClearHistory }
   - { key: H,      mods: Command, action: Hide }
+  - { key: I,      mods: Control, chars: "\x1b[105;5u" }
 
 shell:
   program: /bin/zsh

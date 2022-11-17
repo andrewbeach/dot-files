@@ -14,8 +14,6 @@ set number
 set wildmode=longest,list   " get bash-like tab completions
 set cmdheight=2 
 
-
-
 set textwidth=80
 
 let mapleader = ","
@@ -160,6 +158,13 @@ Plug 'othree/html5.vim'
 Plug 'https://github.com/preservim/nerdtree.git'
 map <Leader>n :NERDTreeToggle %<CR>
 
+" Rust
+Plug 'simrat39/rust-tools.nvim'
+
+" Debugging
+Plug 'nvim-lua/plenary.nvim'
+Plug 'mfussenegger/nvim-dap'
+
 call plug#end()
 
 silent! helptags ALL
@@ -224,7 +229,7 @@ nnoremap <C-l> <C-w><C-l>
 nnoremap <leader>t :tab drop<space>
 
 " File Shortcuts
-nnoremap <leader><C-I> :tab drop ~/.config/nvim/init.vim <cr>
+nnoremap <leader><C-V> :tab drop ~/.config/nvim/init.vim <cr>
 nnoremap <leader>ev :vsplit $MYVIMRC<cr>
 nnoremap <leader>sv :source $MYVIMRC<cr>
 nnoremap <leader>ea :vsplit $HOME/.config/alacritty/alacritty.yml<cr>
@@ -239,6 +244,19 @@ set secure
 " LSP
 lua << EOF
 local nvim_lsp = require('lspconfig')
+
+local rt = require("rust-tools")
+
+rt.setup({
+  server = {
+    on_attach = function(_, bufnr)
+      -- Hover actions
+      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
+      -- Code action groups
+      vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
+    end,
+  },
+})
 
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
@@ -261,7 +279,7 @@ end
 
 -- Call 'setup' on multiple servers and map buffer local keybindings 
 -- when the language server attaches
-local servers = { "rust_analyzer", "tsserver" }
+local servers = { "tsserver" }
 for _, lsp in ipairs(servers) do
   nvim_lsp[lsp].setup {
     on_attach = on_attach,
