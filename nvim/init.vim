@@ -43,6 +43,9 @@ set statusline+=%-4L]
 
 call plug#begin('~/.config/nvim/plugged')
 
+" Lsp
+Plug 'neovim/nvim-lspconfig'
+
 " Git 
 Plug 'https://github.com/tpope/vim-fugitive'
 nmap gmc /\v^[<=>\|]{7}.*$<CR>
@@ -65,20 +68,9 @@ Plug 'easymotion/vim-easymotion'
 Plug 'https://github.com/vim-syntastic/syntastic'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 Plug 'Shougo/vimproc.vim', { 'do' : 'make' }
-Plug 'neovim/nvim-lspconfig'
-Plug 'glepnir/lspsaga.nvim'
 nnoremap <leader>wf :w<cr>
 inoremap <leader>wf <C-c>:w<cr>
 nnoremap <leader>q :q<cr>
-nnoremap <silent> gd :Lspsaga preview_definition<cr>
-nnoremap <silent><leader>K :Lspsaga hover_doc<cr>
-nnoremap <silent> <C-f> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(1)<cr>
-nnoremap <silent> <C-b> <cmd>lua require('lspsaga.action').smart_scroll_with_saga(-1)<cr>
-nnoremap <silent> gr <cmd>Lspsaga lsp_finder<cr>
-inoremap <silent> <C-k> <cmd>Lspsaga signature_help<cr>
-nnoremap <silent> <leader>ca :Lspsaga code_action<cr>
-vnoremap <silent> <leader>ca :<C-U>Lspsaga range_code_action<cr>
-nnoremap <silent>rn :Lspsaga rename<cr>
 nnoremap <leader>cc mF:%!eslint_d --stdin --fix-to-stdout<CR>`F
 vnoremap <leader>cc :!eslint_d --stdin --fix-to-stdout<CR>gv
 
@@ -102,33 +94,6 @@ let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 0
 let g:syntastic_check_on_open = 0
 let g:syntastic_check_on_wq = 0
-
-" " Coc
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" let g:coc_global_extensions = [ 
-"   \ 'coc-tsserver'
-"   \ ]
-" nmap <silent> gd <Plug>(coc-definition)
-" nmap <silent> gy <Plug>(coc-type-definition)
-" nmap <silent> gr <Plug>(coc-references)
-" nmap <silent> do <Plug>(coc-codeaction)
-" nmap <leader>rn <Plug>(coc-rename)
-" nmap <leader>D :call <SID>show_documentation()<CR>
-" function! s:show_documentation()
-"   if (index(['vim','help'], &filetype) >= 0)
-"     execute 'h '.expand('<cword>')
-"   elseif (coc#rpc#ready())
-"     call CocActionAsync('doHover')
-"   else
-"     execute '!' . &keywordprg . " " . expand('<cword>')
-"   endif
-" endfunction
-" xmap <leader>c  <Plug>(coc-codeaction-selected)
-" nmap <leader>c  <Plug>(coc-codeaction-selected)
-" " Remap keys for applying codeAction to the current buffer.
-" nmap <leader>cc  <Plug>(coc-codeaction)
-" " Apply AutoFix to problem on the current line.
-" nmap <leader>cf  <Plug>(coc-fix-current)
 
 " Org 
 Plug 'jceb/vim-orgmode'
@@ -160,6 +125,7 @@ map <Leader>n :NERDTreeToggle %<CR>
 
 " Rust
 Plug 'simrat39/rust-tools.nvim'
+map <Leader>rh :RustHoverActions<CR>
 
 " Debugging
 Plug 'nvim-lua/plenary.nvim'
@@ -241,126 +207,27 @@ vnoremap <C-c> "*y
 set exrc
 set secure
 
-" LSP
 lua << EOF
-local nvim_lsp = require('lspconfig')
-
-local rt = require("rust-tools")
-
-rt.setup({
-  server = {
-    on_attach = function(_, bufnr)
-      -- Hover actions
-      vim.keymap.set("n", "<C-space>", rt.hover_actions.hover_actions, { buffer = bufnr })
-      -- Code action groups
-      vim.keymap.set("n", "<Leader>a", rt.code_action_group.code_action_group, { buffer = bufnr })
-    end,
-  },
-})
-
 local on_attach = function(client, bufnr)
   local function buf_set_keymap(...) vim.api.nvim_buf_set_keymap(bufnr, ...) end
   local function buf_set_option(...) vim.api.nvim_buf_set_option(bufnr, ...) end
-
-  --Enable completion triggered by <c-x><c-o>
-  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
-
   local opts = { noremap=true, silent=true }
 
-  buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_option('omnifunc', 'v:lua.vim.lsp.omnifunc')
 
-  if client.resolved_capabilities.document_formatting then
-    vim.api.nvim_command [[augroup Format]]
-    vim.api.nvim_command [[autocmd! * <buffer>]]
-    vim.api.nvim_command [[autocmd BufWritePre <buffer> lua vim.lsp.buf.formatting_seq_sync()]]
-    vim.api.nvim_command [[augroup END]]
-  end
+  buf_set_keymap('n', '<leader>ld', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+  buf_set_keymap('n', '<leader>lD', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
+  buf_set_keymap('n', '<leader>lu', '<Cmd>lua vim.lsp.buf.references()<CR>', opts)
+  buf_set_keymap('n', '<leader>lr', '<Cmd>lua vim.lsp.buf.rename()<CR>', opts)
+  buf_set_keymap('n', '<leader>la', '<Cmd>lua vim.lsp.buf.code_action()<CR>', opts)
+
+  buf_set_keymap('n', '<leader>ln', '<Cmd>lua vim.diagnostic.goto_next()<CR>', opts)
+  buf_set_keymap('n', '<leader>lp', '<Cmd>lua vim.diagnostic.goto_prev()<CR>', opts)
+  buf_set_keymap('n', '<leader>le', '<Cmd>lua vim.diagnostic.open_float()<CR>', opts)
+  buf_set_keymap('n', '<leader>lq', '<Cmd>lua vim.diagnostic.setqflist()<CR>', opts)
+
+  vim.cmd[[autocmd BufWritePre <buffer> lua vim.lsp.buf.format(nil, 1000)]]
 end
 
--- Call 'setup' on multiple servers and map buffer local keybindings 
--- when the language server attaches
-local servers = { "tsserver" }
-for _, lsp in ipairs(servers) do
-  nvim_lsp[lsp].setup {
-    on_attach = on_attach,
-    flags = {
-      debounce_text_changes = 150,
-    }
-  }
-end
-
-nvim_lsp.diagnosticls.setup {
-  on_attach = on_attach,
-  filetypes = { 'json', 'typescript', 'typescriptreact', 'css', 'less', 'scss', 'markdown' },
-  init_options = {
-    linters = {
-      eslint = {
-        command = 'eslint_d',
-        rootPatterns = { '.git' },
-        debounce = 100,
-        args = { '--stdin', '--stdin-filename', '%filepath', '--format', 'json' },
-        sourceName = 'eslint_d',
-        parseJson = {
-          errorsRoot = '[0].messages',
-          line = 'line',
-          column = 'column',
-          endLine = 'endLine',
-          endColumn = 'endColumn',
-          message = '[eslint] ${message} [${ruleId}]',
-          security = 'severity'
-        },
-        securities = {
-          [2] = 'error',
-          [1] = 'warning'
-        }
-      },
-    },
-    filetypes = {
-      javascript = 'eslint',
-      javascriptreact = 'eslint',
-      typescript = 'eslint',
-      typescriptreact = 'eslint',
-    },
-    formatters = {
-      eslint_d = {
-        command = 'eslint_d',
-        args = { '--stdin', '--stdin-filename', '%filename', '--fix-to-stdout' },
-        rootPatterns = { '.git' },
-      },
-      prettier = {
-        command = 'prettier',
-        args = { '--stdin-filepath', '%filename' }
-      }
-    },
-    formatFiletypes = {
-      css = 'prettier',
-      json = 'prettier',
-      scss = 'prettier',
-      less = 'prettier',
-      typescript = 'eslint_d',
-      typescriptreact = 'eslint_d',
-      json = 'prettier',
-      markdown = 'prettier',
-    }
-  }
-}
-
-require'nvim-treesitter.configs'.setup {
-  ensure_installed = "maintained",
-  highlight = {
-    enable = true,
-  },
-}
-
-local saga = require('lspsaga')
-
--- saga.init_lsp_saga {
---   error_sign = '',
---   warn_sign = '',
---   hint_sign = '',
---   infor_sign = '',
---   border_style = "round",
--- }
-
+require'lspconfig'.tsserver.setup{ on_attach = on_attach }
 EOF
-
