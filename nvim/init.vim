@@ -48,6 +48,7 @@ Plug 'neovim/nvim-lspconfig'
 
 " Git 
 Plug 'https://github.com/tpope/vim-fugitive'
+Plug 'https://github.com/github/copilot.vim'
 nmap gmc /\v^[<=>\|]{7}.*$<CR>
 
 " Search 
