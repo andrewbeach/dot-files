@@ -1,6 +1,7 @@
 coc
 configstore
 iterm2
+github-copilot/hosts.json
 thefuck
 yarn
 zsh/.zsh_history
