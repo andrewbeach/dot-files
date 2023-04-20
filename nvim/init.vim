@@ -114,6 +114,9 @@ Plug 'ionide/Ionide-vim', {
     \ 'do': 'make fsautocomplete', 
     \ }
 
+" Go
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+
 " Idris 
 Plug 'https://github.com/idris-hackers/idris-vim.git'
 
@@ -231,4 +234,6 @@ local on_attach = function(client, bufnr)
 end
 
 require'lspconfig'.tsserver.setup{ on_attach = on_attach }
+require'lspconfig'.gopls.setup{ on_attach = on_attach }
+require'lspconfig'.rust_analyzer.setup{ on_attach = on_attach }
 EOF

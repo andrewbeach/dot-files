@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:$HOME/.config/bin:/opt/homebrew/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:$HOME/.config/bin:/usr/local/go/bin:/opt/homebrew/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH="/Users/andrewbeach/.config/zsh/oh-my-zsh"
